@@ -31,7 +31,6 @@ import { AddressNetwork } from "./accounts"
 import rootReducer from "./redux-slices"
 import {
   loadAccount,
-  blockSeen,
   updateAccountBalance,
   updateENSName,
   updateENSAvatar,
@@ -45,6 +44,7 @@ import {
   keyringUnlocked,
   updateKeyrings,
 } from "./redux-slices/keyrings"
+import { blockSeen } from "./redux-slices/networks"
 import {
   initializationLoadingTimeHitLimit,
   emitter as uiSliceEmitter,
@@ -86,7 +86,7 @@ const devToolsSanitizer = (input: unknown) => {
 
 // The version of persisted Redux state the extension is expecting. Any previous
 // state without this version, or with a lower version, ought to be migrated.
-const REDUX_STATE_VERSION = 2
+const REDUX_STATE_VERSION = 3
 
 type Migration = (prevState: Record<string, unknown>) => Record<string, unknown>
 
@@ -115,6 +115,44 @@ const REDUX_MIGRATIONS: { [version: number]: Migration } = {
       ?.addressNetwork
     delete (newState as OldState)?.ui?.currentAccount
     newState.selectedAccount = addressNetwork as BroadAddressNetwork
+    return newState
+  },
+  3: (prevState: Record<string, unknown>) => {
+    // Migrate the ETH-only block data in store.accounts.blocks[blockHeight] to
+    // a new networks slice. Block data is now network-specific, keyed by EVM
+    // chainID in store.networks.networkData[chainId].blocks
+    type OldState = {
+      account: {
+        blocks?: { [blockHeight: number]: unknown }
+      }
+    }
+    type NewState = {
+      networks: {
+        networkData: {
+          [chainID: string]: {
+            blockHeight: number | null
+            blocks: {
+              [blockHeight: number]: unknown
+            }
+          }
+        }
+      }
+    }
+    const newState = { ...prevState }
+    newState.networks = {
+      networkData: {
+        "1": {
+          blocks: { ...(prevState as OldState).account?.blocks },
+          blockHeight:
+            Math.max(
+              ...Object.keys((prevState as OldState).account?.blocks ?? {}).map(
+                (s) => parseInt(s, 10)
+              )
+            ) || null,
+        },
+      },
+    }
+    delete (newState as OldState).account?.blocks
     return newState
   },
 }
