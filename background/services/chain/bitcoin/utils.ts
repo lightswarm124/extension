@@ -1,3 +1,4 @@
+import { getBitcoinNetwork } from "../../../lib/utils"
 import {
   BCHBlock,
   // Vin,
@@ -12,6 +13,7 @@ export function blockFromBCHBlock(bchResult: BCHBlock): BCHBlock {
     difficulty: bchResult.difficulty,
     height: bchResult.height,
     time: bchResult.time,
+    network: getBitcoinNetwork(),
   }
 }
 
@@ -25,5 +27,6 @@ export function transactionFromBCHTransaction(
     hash: transaction.hash,
     vin: transaction.vin,
     vout: transaction.vout,
+    network: getBitcoinNetwork(),
   }
 }

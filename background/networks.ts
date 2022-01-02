@@ -253,6 +253,13 @@ export type BlockEstimate = {
 }
 
 /**
+ * BCH Network
+ */
+export type BTCNetwork = Network & {
+  family: "BTC"
+}
+
+/**
  * A BTC-style block identifier for BCH, including hash, height, difficulty and timestamp
  */
 export type BCHBlock = {
@@ -261,6 +268,7 @@ export type BCHBlock = {
   difficulty: bigint
   height: number
   time: UNIXTime
+  network: BTCNetwork
 }
 
 /**
@@ -301,4 +309,5 @@ export type BCHTransaction = {
   hash: string
   vin: Vin[]
   vout: Vout[]
+  network: BTCNetwork
 }

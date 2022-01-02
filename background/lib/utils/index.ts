@@ -1,8 +1,16 @@
 import { utils } from "ethers"
 import { normalizeHexAddress } from "@tallyho/hd-keyring"
 import { HexString } from "../../types"
-import { EVMNetwork } from "../../networks"
-import { ETHEREUM, ROPSTEN, RINKEBY, GOERLI, KOVAN } from "../../constants"
+import { BTCNetwork, EVMNetwork } from "../../networks"
+import {
+  ETHEREUM,
+  ROPSTEN,
+  RINKEBY,
+  GOERLI,
+  KOVAN,
+  BITCOIN,
+  BITCOINCASH,
+} from "../../constants"
 
 export function normalizeEVMAddress(address: string | Buffer): HexString {
   return normalizeHexAddress(address)
@@ -101,6 +109,22 @@ export function getEthereumNetwork(): EVMNetwork {
 
   // Default to mainnet
   return ETHEREUM
+}
+
+/**
+ * TO-DO: harmonize ethereumNetwork with bitcoinNetwork
+ */
+export function getBitcoinNetwork(): BTCNetwork {
+  const bitcoinNetwork = process.env.BITCOIN_NETWORK?.toUpperCase()
+
+  switch (bitcoinNetwork) {
+    case "BITCOINCASH":
+      return BITCOINCASH
+      break
+
+    default:
+      return BITCOIN
+  }
 }
 
 export function truncateAddress(address: string): string {
