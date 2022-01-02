@@ -251,3 +251,54 @@ export type BlockEstimate = {
    */
   maxFeePerGas: bigint
 }
+
+/**
+ * A BTC-style block identifier for BCH, including hash, height, difficulty and timestamp
+ */
+export type BCHBlock = {
+  hash: string
+  previousblockhack: string
+  difficulty: bigint
+  height: number
+  time: UNIXTime
+}
+
+/**
+ * BCH transaction input fields; put existing Unspent Transaction Outputs (UTXOS) here
+ */
+export type Vin = {
+  scriptSig: {
+    asm: string
+    hex: string
+  }
+  sequence: number
+  txid: string
+  vout: number
+}
+
+/**
+ * BCH transaction output fields; produces new Unspent Transaction Outputs (UTXOs)
+ */
+export type Vout = {
+  n: number
+  scriptPubKey: {
+    addresses: string[]
+    asm: string
+    hex: string
+    reqSigs: number
+    type: string
+  }
+  value: number
+}
+
+/**
+ * Base BCH transaction fields; furthur specified by UTXO inputs and outputs
+ */
+export type BCHTransaction = {
+  blockhash: string
+  blocktime: number
+  confirmations: number
+  hash: string
+  vin: Vin[]
+  vout: Vout[]
+}

@@ -1,5 +1,5 @@
 import { EVMNetwork, Network } from "../networks"
-import { BTC, ETH } from "./currencies"
+import { BTC, ETH, BCH } from "./currencies"
 
 // TODO integrate this with /api/networks
 
@@ -41,6 +41,12 @@ export const KOVAN: EVMNetwork = {
 export const BITCOIN: Network = {
   name: "Bitcoin",
   baseAsset: BTC,
+  family: "BTC",
+}
+
+export const BITCOINCASH: Network = {
+  name: "Bitcoin Cash",
+  baseAsset: BCH,
   family: "BTC",
 }
 

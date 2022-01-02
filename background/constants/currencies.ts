@@ -42,7 +42,18 @@ export const BTC: FungibleAsset = {
   },
 }
 
-export const BASE_ASSETS = [ETH, BTC]
+export const BCH: FungibleAsset = {
+  name: "Bitcoin Cash",
+  symbol: "BCH",
+  decimals: 8,
+  metadata: {
+    coinGeckoID: "bitcoin-cash",
+    tokenLists: [],
+    websiteURL: "https://bitcoincash.org/",
+  },
+}
+
+export const BASE_ASSETS = [ETH, BTC, BCH]
 
 export const BASE_ASSETS_BY_SYMBOL = BASE_ASSETS.reduce<{
   [assetSymbol: string]: FungibleAsset
